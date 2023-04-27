@@ -1,0 +1,41 @@
+rule CheckPremiumIns "Check if offer can be applied for user" {
+    when
+        InputData.Age >= 16 && InputData.Age <= 25 &&  InputData.HasCar == true && InputData.CarType == "sport" && InputData.Gender == "male"
+    then
+        OutputData.OfferType += "Premium insurance, ";
+        Retract("CheckPremiumIns");
+}
+
+
+rule CheckLifeIns "Check if offer can be applied for user" {
+    when
+        InputData.Income >= 10000 && InputData.Age >= 25
+    then
+        OutputData.OfferType = "Life insurance, ";
+        Retract("CheckLifeIns");
+}
+
+
+rule CheckCarIns {
+    when
+        InputData.HasCar == true && (InputData.Income >= 1000 ||  InputData.Gender == "female") && InputData.CarType != "sport"
+    then
+        OutputData.OfferType += "Car insurance, ";
+        Retract("CheckCarIns");
+}
+
+rule CheckHealthIns  {
+    when
+        InputData.Income >= 1000 && InputData.Age >= 40 && InputData.HasCar == false
+    then
+        OutputData.OfferType += "Health insurance, ";
+        Retract("CheckHealthIns");
+}
+
+rule CheckFamilyIns "Check if offer can be applied for user" {
+    when
+        InputData.Income >= 1000 && InputData.HasChildren == true
+    then
+        OutputData.OfferType += "Family insurance, ";
+        Retract("CheckFamilyIns");
+}
